@@ -1,0 +1,121 @@
+:root {
+  --bg: #0b0420;
+  --bg2: #1a0b3d;
+  --pink: #ff2bd6;
+  --cyan: #00e5ff;
+  --yellow: #ffd400;
+  --green: #39ff88;
+  --orange: #ff6b35;
+  --red: #ff3b5c;
+  --text: #f3eaff;
+  --muted: #a99bd1;
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-b: rgba(255, 255, 255, 0.14);
+  --optA: #ff3b7f; --optB: #2f8bff; --optC: #ffb800; --optD: #19d98b;
+  --title: 'Orbitron', 'Segoe UI', system-ui, sans-serif;
+  --body: 'Outfit', 'Segoe UI', system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  font-family: var(--body);
+  color: var(--text);
+  background: radial-gradient(ellipse at 50% 120%, #ff2bd633 0%, transparent 55%),
+              radial-gradient(ellipse at 10% -10%, #00e5ff22 0%, transparent 50%),
+              linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+button { font-family: inherit; cursor: pointer; }
+input, select { font-family: inherit; }
+.screen { display: none; }
+.screen.active { display: flex; }
+.hidden { display: none !important; }
+
+/* ---------- Fondo synthwave ---------- */
+.bg-fx { position: fixed; inset: 0; pointer-events: none; z-index: -1; overflow: hidden; }
+.bg-fx .sun {
+  position: absolute; left: 50%; bottom: 28%; width: 46vmin; height: 46vmin; transform: translateX(-50%);
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffd400 0%, #ff6b35 45%, #ff2bd6 80%);
+  -webkit-mask-image: var(--sunmask);
+  mask-image: var(--sunmask);
+  --sunmask: linear-gradient(180deg, #000 0 48%, transparent 48% 52%, #000 52% 61%, transparent 61% 66%, #000 66% 74%, transparent 74% 80%, #000 80% 86%, transparent 86% 92%, #000 92%);
+  filter: drop-shadow(0 0 40px #ff2bd6aa);
+  opacity: 0.35;
+}
+.bg-fx .grid {
+  position: absolute; left: -50%; right: -50%; bottom: -10%; height: 45%;
+  background-image: linear-gradient(#ff2bd6 2px, transparent 2px), linear-gradient(90deg, #ff2bd6 2px, transparent 2px);
+  background-size: 70px 70px;
+  transform: perspective(300px) rotateX(60deg);
+  transform-origin: bottom;
+  animation: grid 2.5s linear infinite;
+  opacity: 0.22;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 40%);
+  mask-image: linear-gradient(180deg, transparent, #000 40%);
+}
+@keyframes grid { to { background-position: 0 70px, 0 0; } }
+.bg-fx .float {
+  position: absolute; font-size: 28px; opacity: 0.12; animation: floatUp linear infinite;
+}
+@keyframes floatUp { from { transform: translateY(110vh) rotate(0); } to { transform: translateY(-20vh) rotate(360deg); } }
+
+/* ---------- Tipografía y comunes ---------- */
+.logo {
+  font-family: var(--title); font-weight: 900; letter-spacing: 0.04em;
+  background: linear-gradient(90deg, var(--cyan), var(--pink) 50%, var(--yellow));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 18px #ff2bd666);
+  margin: 0;
+}
+.logo small { display: block; font-size: 0.32em; letter-spacing: 0.3em; color: var(--muted); -webkit-text-fill-color: var(--muted); filter: none; font-weight: 600; }
+.card {
+  background: var(--glass); border: 1px solid var(--glass-b); border-radius: 22px;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 20px 60px #0008, inset 0 1px 0 #ffffff1a;
+}
+.btn {
+  border: 0; border-radius: 14px; padding: 14px 26px; font-weight: 800; font-size: 1.05rem; color: #160530;
+  background: linear-gradient(135deg, var(--cyan), #7af6ff);
+  box-shadow: 0 6px 0 #0098ad, 0 10px 30px #00e5ff55;
+  transition: transform 0.08s, box-shadow 0.08s, filter 0.2s;
+  letter-spacing: 0.02em;
+}
+.btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #0098ad; }
+.btn:disabled { filter: grayscale(1) brightness(0.6); cursor: not-allowed; }
+.btn.pink { background: linear-gradient(135deg, var(--pink), #ff7ae8); box-shadow: 0 6px 0 #a3138a, 0 10px 30px #ff2bd655; color: #fff; }
+.btn.yellow { background: linear-gradient(135deg, var(--yellow), #ffe974); box-shadow: 0 6px 0 #b39500, 0 10px 30px #ffd40055; }
+.btn.ghost { background: var(--glass); color: var(--text); box-shadow: inset 0 0 0 1px var(--glass-b); }
+.btn.big { font-size: 1.4rem; padding: 18px 40px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px;
+  background: var(--glass); border: 1px solid var(--glass-b); font-weight: 700; font-size: 0.95rem;
+}
+.muted { color: var(--muted); }
+
+/* ---------- Avatar ---------- */
+.av { position: relative; display: inline-block; line-height: 1; }
+.av-base { display: inline-block; }
+.av-acc { position: absolute; font-size: 0.55em; pointer-events: none; }
+.av-acc.hat { top: -0.42em; left: 50%; transform: translateX(-50%) rotate(-12deg); }
+.av-acc.eyes { top: 0.12em; left: 50%; transform: translateX(-50%); font-size: 0.6em; }
+.av-acc.hand { bottom: -0.05em; right: -0.3em; transform: rotate(15deg); }
+
+/* ---------- Opciones ---------- */
+.opt-A { --oc: var(--optA); } .opt-B { --oc: var(--optB); } .opt-C { --oc: var(--optC); } .opt-D { --oc: var(--optD); }
+.letter {
+  display: inline-grid; place-items: center; flex: none; width: 2em; height: 2em; border-radius: 10px;
+  background: var(--oc); color: #fff; font-family: var(--title); font-weight: 900; text-shadow: 0 2px 0 #0004;
+}
+
+.confetti { position: fixed; inset: 0; pointer-events: none; z-index: 999; }
+
+@keyframes pop { 0% { transform: scale(0); } 70% { transform: scale(1.2); } 100% { transform: scale(1); } }
+@keyframes bob { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-10%) rotate(4deg); } }
+@keyframes run { 0%, 100% { transform: translateY(0) rotate(-8deg); } 50% { transform: translateY(-25%) rotate(8deg); } }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+@keyframes glow { 0%, 100% { box-shadow: 0 0 0 3px var(--green), 0 0 30px var(--green); } 50% { box-shadow: 0 0 0 5px var(--green), 0 0 60px var(--green); } }
+@keyframes rise { from { transform: translate(-50%, 0); opacity: 1; } to { transform: translate(-50%, -90%); opacity: 0; } }
+@keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }

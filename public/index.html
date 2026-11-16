@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#0b0420">
+<title>Capital Rush · Jugar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/player.css">
+</head>
+<body class="player">
+<div class="bg-fx"><div class="sun"></div><div class="grid"></div></div>
+<div id="conn" class="conn hidden">Reconectando…</div>
+
+<!-- ============ UNIRSE ============ -->
+<section id="join" class="screen active">
+  <h1 class="logo">CAPITAL RUSH<small>MATEMÁTICA FINANCIERA</small></h1>
+  <div class="card pad">
+    <label class="lbl">Código de la partida</label>
+    <input id="code" class="inp code" maxlength="4" autocomplete="off" autocapitalize="characters" placeholder="ABCD">
+    <label class="lbl">Tu nombre</label>
+    <input id="name" class="inp" maxlength="14" autocomplete="off" placeholder="Ej: Lucía">
+    <label class="lbl">Elige tu avatar</label>
+    <div class="preview"><span id="preview"></span></div>
+    <div id="avatarGrid" class="avatar-grid"></div>
+    <label class="lbl">Complemento</label>
+    <div id="accGrid" class="acc-grid"></div>
+    <div id="joinErr" class="err"></div>
+    <button id="joinBtn" class="btn pink big full">¡A la carrera! 🏁</button>
+  </div>
+</section>
+
+<!-- ============ ESPERANDO ============ -->
+<section id="wait" class="screen center">
+  <div class="me-big" id="waitAvatar"></div>
+  <h2 id="waitName"></h2>
+  <div class="chip">✅ ¡Estás dentro!</div>
+  <p class="muted big-txt">Mira la pantalla grande.<br>La carrera empieza cuando el profe lo diga…</p>
+  <div class="dots"><span></span><span></span><span></span></div>
+  <p class="muted tip">🧮 Ten la calculadora a mano: cuanto antes aciertes, más avanzas.</p>
+</section>
+
+<!-- ============ PREGUNTA ============ -->
+<section id="question" class="screen">
+  <div class="q-head">
+    <span class="chip" id="pRound">P1</span>
+    <span class="p-topic" id="pTopic"></span>
+    <span class="p-time" id="pTime">60</span>
+  </div>
+  <div class="tbar"><div id="tbarFill"></div></div>
+  <div class="p-text card" id="pText"></div>
+  <div class="p-opts" id="pOpts"></div>
+</section>
+
+<!-- ============ RESPONDIDO ============ -->
+<section id="sent" class="screen center">
+  <div class="sent-ico">🚀</div>
+  <h2>¡Respuesta enviada!</h2>
+  <div class="sent-opt" id="sentOpt"></div>
+  <div class="chip big-chip" id="sentTime"></div>
+  <p class="muted">Esperando a que acabe el tiempo…</p>
+  <div class="dots"><span></span><span></span><span></span></div>
+</section>
+
+<!-- ============ RESULTADO ============ -->
+<section id="result" class="screen center">
+  <div class="res-ico" id="resIco"></div>
+  <h2 class="res-title" id="resTitle"></h2>
+  <div class="res-gain" id="resGain"></div>
+  <div class="res-fast hidden" id="resFast">⚡ ¡El más rápido de la clase! +bonus</div>
+  <div class="card res-card">
+    <div class="muted">Respuesta correcta</div>
+    <div class="res-correct" id="resCorrect"></div>
+    <div class="res-steps" id="resSteps"></div>
+  </div>
+  <div class="mini-track">
+    <div class="mt-line"><div class="mt-fill" id="mtFill"></div><span class="mt-me" id="mtMe"></span><span class="mt-flag">🏁</span></div>
+    <div class="mt-info"><span id="mtPos"></span><span id="mtMeters"></span></div>
+  </div>
+</section>
+
+<!-- ============ FINAL ============ -->
+<section id="final" class="screen center">
+  <div class="final-medal" id="finalMedal"></div>
+  <h2 id="finalTitle"></h2>
+  <div class="me-big" id="finalAvatar"></div>
+  <p class="big-txt" id="finalTxt"></p>
+  <p class="muted">Mira el podio en la pantalla grande 🏆</p>
+</section>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/player.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: capital-rush
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start

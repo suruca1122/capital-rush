@@ -1,0 +1,17 @@
+{
+  "name": "capital-rush",
+  "version": "1.0.0",
+  "description": "Capital Rush: carrera multijugador para repasar matemática financiera",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.8.4"
+  }
+}
