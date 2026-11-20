@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Capital Rush · Pantalla del profesor</title>
+<title>La Carrera del Rey · Pantalla del profesor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
@@ -15,12 +15,23 @@
 <!-- ============ CONFIGURACIÓN ============ -->
 <section id="setup" class="screen active">
   <div class="setup-wrap">
-    <h1 class="logo hero">CAPITAL RUSH<small>LA CARRERA DE LA MATEMÁTICA FINANCIERA</small></h1>
+    <div class="crown-hero">👑</div>
+    <h1 class="logo hero">LA CARRERA DEL REY<small>MATEMÁTICA FINANCIERA · CONTABILIDAD · IVA</small></h1>
     <div class="card setup-card">
       <h2>⚙️ Configura la partida</h2>
       <div class="field">
-        <label>Temas</label>
-        <div id="topicPick" class="topic-pick"></div>
+        <div class="topic-head">
+          <label>Temas</label>
+          <div class="quick">
+            <button type="button" class="chip" data-q="fin">📈 Matemática financiera</button>
+            <button type="button" class="chip" data-q="cont">📒 Contabilidad e IVA</button>
+            <button type="button" class="chip" data-q="all">✅ Todos</button>
+          </div>
+        </div>
+        <div class="topic-group-title">Matemática financiera</div>
+        <div id="topicPickFin" class="topic-pick"></div>
+        <div class="topic-group-title">Contabilidad e IVA</div>
+        <div id="topicPickCont" class="topic-pick"></div>
       </div>
       <div class="row3">
         <div class="field">
@@ -51,7 +62,7 @@
         </div>
       </div>
       <button id="createBtn" class="btn pink big">🚀 Crear partida</button>
-      <p class="muted small">Los alumnos necesitarán calculadora. Se usa año comercial (360 días).</p>
+      <p class="muted small">En matemática financiera los alumnos necesitarán calculadora (año comercial de 360 días). La dificultad solo afecta a los temas de matemática financiera.</p>
     </div>
   </div>
 </section>
@@ -69,7 +80,7 @@
       <img id="qr" class="qr" alt="QR para unirse">
     </div>
     <div class="lobby-side">
-      <h1 class="logo">CAPITAL RUSH</h1>
+      <div class="crown-sm">👑</div><h1 class="logo">LA CARRERA DEL REY</h1>
       <div class="count-big"><span id="playerCount">0</span><small>/ 14 jugadores</small></div>
       <button id="startBtn" class="btn pink big" disabled>🏁 ¡Empezar carrera!</button>
       <div id="startHint" class="muted">Se necesitan al menos 2 jugadores</div>
@@ -81,7 +92,7 @@
 <!-- ============ JUEGO ============ -->
 <section id="game" class="screen">
   <header class="game-head">
-    <div class="logo small-logo">CAPITAL RUSH</div>
+    <div class="small-logo-wrap"><span>👑</span><span class="logo small-logo">LA CARRERA DEL REY</span></div>
     <div class="chip" id="roundChip">Pregunta 1</div>
     <div class="chip" id="answeredChip">0 / 0 han respondido</div>
     <div class="spacer"></div>
@@ -104,7 +115,7 @@
       <div class="q-opts" id="qOpts"></div>
     </div>
     <div class="explain card hidden" id="explain">
-      <div class="ex-title">📐 Resolución</div>
+      <div class="ex-title" id="exTitle">📐 Resolución</div>
       <div class="ex-formula" id="exFormula"></div>
       <div class="ex-steps" id="exSteps"></div>
       <div class="ex-fast" id="exFast"></div>
@@ -112,14 +123,14 @@
   </div>
 
   <div class="track card" id="track">
-    <div class="finish"><span>META</span></div>
+    <div class="finish"><span>👑 TRONO</span></div>
     <div id="lanes" class="lanes"></div>
   </div>
 </section>
 
 <!-- ============ PODIO ============ -->
 <section id="podium" class="screen">
-  <h1 class="logo winner-title">🏆 ¡TENEMOS CAMPEÓN! 🏆</h1>
+  <h1 class="winner-title"><span class="wt-crown">👑</span><span class="logo">¡LARGA VIDA AL REY!</span><span class="wt-crown">👑</span></h1>
   <div class="podium-wrap" id="podiumWrap"></div>
   <div class="rest card" id="restList"></div>
   <div class="podium-btns">

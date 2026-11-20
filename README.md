@@ -1,4 +1,4 @@
-# 💸 CAPITAL RUSH: la carrera de la matemática financiera
+# 👑 LA CARRERA DEL REY: matemática financiera, contabilidad e IVA
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/suruca1122/capital-rush)
 
@@ -6,7 +6,7 @@
 > - Profesor: `…onrender.com/profe`
 > - Alumnos: `…onrender.com` (o escanean el QR)
 
-Juego multijugador en tiempo real para repasar **interés simple, interés compuesto, descuento simple y descuento compuesto**.
+Juego multijugador en tiempo real para repasar **matemática financiera** (interés simple y compuesto, descuento simple y compuesto) y **contabilidad e IVA** (cuentas del PGC de Pymes, masas patrimoniales y calificación de operaciones de IVA).
 Juegan de 2 a 14 alumnos a la vez desde el móvil o el ordenador. El profesor proyecta la carrera en la pantalla grande.
 
 ## Cómo se juega
@@ -18,7 +18,7 @@ Juegan de 2 a 14 alumnos a la vez desde el móvil o el ordenador. El profesor pr
    - se muestra la respuesta correcta con la **fórmula y la resolución paso a paso**;
    - los que aciertan **avanzan en la pista**. **Cuanto más rápido responden, más avanzan**, y el más rápido recibe un **bonus ⚡**;
    - los que fallan se quedan en el sitio.
-6. **Gana quien cruza antes la meta 🏁.** Si varios la cruzan en la misma pregunta, gana el que ha llegado más lejos. Al final hay podio, confeti y opción de revancha.
+6. **Gana quien llega antes al trono 👑.** Si varios la cruzan en la misma pregunta, gana el que ha llegado más lejos. Al final hay podio, confeti y opción de revancha.
 
 Avance por acierto: entre el 40 % y el 100 % del "tramo" según la rapidez, más un 15 % extra para el más rápido.
 - Sprint: ~6 tramos (unas 8 preguntas).
@@ -26,6 +26,10 @@ Avance por acierto: entre el 40 % y el 100 % del "tramo" según la rapidez, más
 - Maratón: ~15 tramos (unas 20 preguntas).
 
 ### Contenido de las preguntas
+
+En la configuración puedes elegir cualquier combinación de temas. Los botones rápidos marcan solo *Matemática financiera*, solo *Contabilidad e IVA* o *Todos*.
+
+#### Matemática financiera
 Todas se generan con **datos aleatorios**, así que nunca se repiten. Los distractores son **errores típicos**: confundir simple con compuesto, comercial con racional, no pasar meses o días a años, usar 365 días…
 
 | Tema | Básica | Avanzada (se añade) |
@@ -35,7 +39,16 @@ Todas se generan con **datos aleatorios**, así que nunca se repiten. Los distra
 | Descuento simple | comercial y racional: efectivo y descuento | nominal, tipo de descuento |
 | Descuento compuesto | comercial y racional: efectivo y descuento | nominal, tipo |
 
-Convenio: año comercial de 360 días.
+Convenio: año comercial de 360 días. La opción *Dificultad* solo afecta a estos temas.
+
+#### Contabilidad e IVA
+| Tema | Preguntas |
+|---|---|
+| 📒 Cuentas del PGC Pymes | Ver el nombre y acertar el número, o ver el número y acertar el nombre. Unas 190 cuentas de los grupos 1 a 7. Los distractores son cuentas del mismo subgrupo o grupo. |
+| ⚖️ Masas patrimoniales | Decidir si una cuenta es activo no corriente, activo corriente, patrimonio neto, pasivo no corriente o pasivo corriente. Incluye casos con trampa: amortizaciones y deterioros, anticipos a proveedores y de clientes, activos y pasivos por impuesto diferido, dividendo a cuenta… |
+| 🧾 Operaciones de IVA | 45 operaciones para calificar como sujeta (y no exenta), no sujeta, exenta limitada, exenta plena o IVA no deducible, con el artículo de la Ley 37/1992 en la solución. |
+
+Dentro de una misma partida no se repite ninguna cuenta ni ninguna operación.
 
 ### Controles del profesor
 - **⏩ Cerrar tiempo**: termina la pregunta antes de tiempo.
@@ -82,7 +95,8 @@ También funciona en cualquier servicio que ejecute Node.js con WebSockets, como
 ## Estructura
 ```
 server.js        servidor en tiempo real (Express + Socket.IO)
-questions.js     generador de preguntas y distractores
+questions.js     generador de preguntas de matemática financiera
+content.js       bancos de preguntas: cuentas del PGC Pymes, masas patrimoniales e IVA
 public/
   host.html      pantalla del profesor (proyector)
   index.html     app del alumno (móvil)

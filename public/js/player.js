@@ -76,6 +76,7 @@ socket.on('question', (q) => {
   $('pRound').textContent = 'P' + q.round;
   const t = $('pTopic'); t.style.setProperty('--tc', q.topicColor); t.textContent = `${q.topicIcon} ${q.topicName}`;
   $('pText').innerHTML = q.text;
+  $('pOpts').classList.toggle('long', q.options.some((o) => o.length > 34));
   $('pOpts').innerHTML = q.options.map((o, i) => `<button class="p-opt opt-${LETTERS[i]}" data-i="${i}"><span class="letter">${LETTERS[i]}</span><span>${o}</span></button>`).join('');
   show('question');
   window.scrollTo(0, 0);
@@ -176,7 +177,7 @@ socket.on('gameover', (g) => showFinal(g.position, g.total));
 function showFinal(position, total) {
   const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
   $('finalMedal').textContent = medals[position] || '🏁';
-  $('finalTitle').textContent = position === 1 ? '¡HAS GANADO!' : position <= 3 ? '¡Al podio!' : '¡Carrera terminada!';
+  $('finalTitle').textContent = position === 1 ? '👑 ¡ERES EL REY! 👑' : position <= 3 ? '¡Al podio de la corte!' : '¡Carrera terminada!';
   $('finalAvatar').innerHTML = avatarHTML(me.avatar, me.acc);
   $('finalTxt').innerHTML = `Has quedado <b>${position}º</b> de ${total}`;
   show('final');

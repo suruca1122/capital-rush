@@ -119,3 +119,8 @@ input, select { font-family: inherit; }
 @keyframes glow { 0%, 100% { box-shadow: 0 0 0 3px var(--green), 0 0 30px var(--green); } 50% { box-shadow: 0 0 0 5px var(--green), 0 0 60px var(--green); } }
 @keyframes rise { from { transform: translate(-50%, 0); opacity: 1; } to { transform: translate(-50%, -90%); opacity: 0; } }
 @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---------- La Carrera del Rey ---------- */
+.crown-hero { font-size: clamp(48px, 7vw, 110px); text-align: center; line-height: 1; animation: bob 2s ease-in-out infinite; filter: drop-shadow(0 0 24px #ffd400aa); }
+.sub { display: block; margin-top: 0.4em; font-size: 0.85em; color: var(--muted); font-weight: 600; }
+.big-num { font-family: var(--title); font-size: 1.5em; color: var(--yellow); letter-spacing: 0.06em; }

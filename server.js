@@ -29,7 +29,7 @@ app.get('/api/info', (_, res) => {
   for (const list of Object.values(os.networkInterfaces())) {
     for (const n of list || []) if (n.family === 'IPv4' && !n.internal) ips.push(n.address);
   }
-  res.json({ ips, port: PORT, topics: Object.fromEntries(Object.entries(TOPICS).map(([k, t]) => [k, { name: t.name, icon: t.icon, color: t.color }])) });
+  res.json({ ips, port: PORT, topics: Object.fromEntries(Object.entries(TOPICS).map(([k, t]) => [k, { name: t.name, icon: t.icon, color: t.color, group: t.group }])) });
 });
 
 // ---------------------------------------------------------------------
@@ -63,7 +63,7 @@ function clearTimers(room) {
 function nextQuestion(room) {
   clearTimers(room);
   room.round++;
-  const q = generateQuestion(room.settings.topics, room.settings.difficulty, room.recent);
+  const q = generateQuestion(room.settings.topics, room.settings.difficulty, room.recent, room.used);
   room.recent = [...room.recent.slice(-4), q.sig];
   room.question = q;
   room.answers = new Map();
@@ -71,7 +71,7 @@ function nextQuestion(room) {
   room.qStart = Date.now();
   const duration = room.settings.time * 1000;
   const payload = {
-    round: room.round, topic: q.topic, topicName: q.topicName, topicIcon: q.topicIcon, topicColor: q.topicColor,
+    round: room.round, topic: q.topic, topicName: q.topicName, topicIcon: q.topicIcon, topicColor: q.topicColor, group: q.group,
     text: q.text, options: q.options, duration, remaining: duration,
   };
   io.to(room.code).emit('question', payload);
@@ -160,7 +160,7 @@ io.on('connection', (socket) => {
         rounds: Math.min(30, Math.max(4, Number(settings.rounds) || 10)),
         difficulty: ['basic', 'mix', 'advanced'].includes(settings.difficulty) ? settings.difficulty : 'mix',
       },
-      players: new Map(), state: 'lobby', round: 0, recent: [], answers: new Map(), created: Date.now(), lastActivity: Date.now(),
+      players: new Map(), state: 'lobby', round: 0, recent: [], used: new Set(), answers: new Map(), created: Date.now(), lastActivity: Date.now(),
     };
     rooms.set(code, room);
     socket.join(code); socket.join(room.hostRoom);
@@ -188,7 +188,7 @@ io.on('connection', (socket) => {
     const room = hostRoom(); if (!room) return;
     if (room.players.size < MIN_PLAYERS) return cb && cb({ ok: false, error: `Se necesitan al menos ${MIN_PLAYERS} jugadores` });
     for (const p of room.players.values()) { p.pos = 0; p.correct = 0; p.streak = 0; p.totalTime = 0; }
-    room.round = 0;
+    room.round = 0; room.used = new Set();
     emitLobby(room);
     nextQuestion(room);
     cb && cb({ ok: true });
@@ -241,7 +241,7 @@ io.on('connection', (socket) => {
       const q = room.question;
       const duration = room.settings.time * 1000;
       socket.emit('question', {
-        round: room.round, topic: q.topic, topicName: q.topicName, topicIcon: q.topicIcon, topicColor: q.topicColor,
+        round: room.round, topic: q.topic, topicName: q.topicName, topicIcon: q.topicIcon, topicColor: q.topicColor, group: q.group,
         text: q.text, options: q.options, duration, remaining: Math.max(0, duration - (Date.now() - room.qStart)),
         alreadyAnswered: room.answers.has(p.id),
       });
@@ -294,7 +294,7 @@ setInterval(() => {
 }, 10 * 60e3);
 
 server.listen(PORT, () => {
-  console.log(`\n💸 CAPITAL RUSH en marcha`);
+  console.log(`\n👑 LA CARRERA DEL REY en marcha`);
   console.log(`   Profesor:  http://localhost:${PORT}/profe`);
   for (const list of Object.values(os.networkInterfaces())) for (const n of list || []) if (n.family === 'IPv4' && !n.internal) console.log(`   Alumnos:   http://${n.address}:${PORT}`);
   console.log('');

@@ -13,7 +13,7 @@ let lastPodium = null;
 // ---------- Fondo con billetes flotantes ----------
 (function floaters() {
   const fx = document.querySelector('.bg-fx');
-  const icons = ['💸', '💰', '📈', '🪙', '💶', '%'];
+  const icons = ['👑', '💰', '📈', '🪙', '📒', '🧾', '%'];
   for (let i = 0; i < 14; i++) {
     const s = document.createElement('span');
     s.className = 'float';
@@ -28,14 +28,23 @@ let lastPodium = null;
 // ---------- Configuración ----------
 fetch('/api/info').then((r) => r.json()).then((d) => {
   info = d;
-  $('topicPick').innerHTML = Object.entries(d.topics).map(([k, t]) => `
-    <input type="checkbox" id="tp-${k}" value="${k}" checked>
-    <label for="tp-${k}" style="--tc:${t.color}"><span class="ic">${t.icon}</span>${t.name}</label>`).join('');
+  const tile = ([k, t]) => `
+    <input type="checkbox" id="tp-${k}" value="${k}" data-g="${t.group}" checked>
+    <label for="tp-${k}" style="--tc:${t.color}"><span class="ic">${t.icon}</span>${t.name}</label>`;
+  const entries = Object.entries(d.topics);
+  $('topicPickFin').innerHTML = entries.filter(([, t]) => t.group !== 'cont').map(tile).join('');
+  $('topicPickCont').innerHTML = entries.filter(([, t]) => t.group === 'cont').map(tile).join('');
 });
+
+document.querySelectorAll('.quick [data-q]').forEach((b) => (b.onclick = () => {
+  const g = b.dataset.q;
+  document.querySelectorAll('.topic-pick input').forEach((i) => (i.checked = g === 'all' || i.dataset.g === g));
+  Sfx.unlock(); Sfx.pop();
+}));
 
 $('createBtn').onclick = () => {
   Sfx.unlock(); Sfx.pop();
-  const topics = [...document.querySelectorAll('#topicPick input:checked')].map((i) => i.value);
+  const topics = [...document.querySelectorAll('.topic-pick input:checked')].map((i) => i.value);
   if (!topics.length) return alert('Elige al menos un tema');
   socket.emit('host:create', { topics, time: $('time').value, rounds: $('rounds').value, difficulty: $('difficulty').value }, (res) => {
     if (!res.ok) return;
@@ -184,6 +193,9 @@ socket.on('question', (q) => {
   tc.style.setProperty('--tc', q.topicColor);
   tc.textContent = `${q.topicIcon} ${q.topicName}`;
   $('qText').innerHTML = '<div>' + q.text + '</div>';
+  const longOpts = q.options.some((o) => o.length > 34);
+  $('qOpts').classList.toggle('long', longOpts);
+  $('exTitle').textContent = q.group === 'cont' ? '💡 Solución' : '📐 Resolución';
   $('qOpts').innerHTML = q.options.map((o, i) => `
     <div class="q-opt opt-${LETTERS[i]}"><span class="bar"></span><span class="letter">${LETTERS[i]}</span><span>${o}</span><span class="cnt"></span></div>`).join('');
   document.querySelector('.q-main').classList.remove('revealed');

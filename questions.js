@@ -1,3 +1,5 @@
+const { accountGens, massGens, ivaGens } = require('./content');
+
 // Generador de preguntas de matemática financiera con datos aleatorios.
 // Convenciones: año comercial de 360 días, 1 año = 12 meses.
 
@@ -418,29 +420,36 @@ const TOPICS = {
   compound: { name: 'Interés compuesto', icon: '🚀', color: '#ff2bd6', gens: compound },
   sdiscount: { name: 'Descuento simple', icon: '✂️', color: '#ffd400', gens: simpleDiscount },
   cdiscount: { name: 'Descuento compuesto', icon: '💎', color: '#39ff88', gens: compoundDiscount },
+  pgc: { name: 'Cuentas del PGC Pymes', icon: '📒', color: '#ff9f1c', gens: accountGens, group: 'cont' },
+  masses: { name: 'Masas patrimoniales', icon: '⚖️', color: '#b388ff', gens: massGens, group: 'cont' },
+  iva: { name: 'Operaciones de IVA', icon: '🧾', color: '#ff5d73', gens: ivaGens, group: 'cont' },
 };
 
 // Probamos cada generador una vez para saber cuáles son "avanzados"
 for (const t of Object.values(TOPICS)) {
-  t.gens = t.gens.map((g) => ({ g, advanced: !!g().advanced }));
+  t.gens = t.gens.map((g) => ({ g, advanced: !!g(new Set()).advanced }));
+  t.group = t.group || 'fin';
 }
 
-function generateQuestion(topics, difficulty = 'mix', avoid = []) {
+function generateQuestion(topics, difficulty = 'mix', avoid = [], used = new Set()) {
   const keys = topics && topics.length ? topics : Object.keys(TOPICS);
   for (let tries = 0; tries < 30; tries++) {
     const key = pick(keys);
     const topic = TOPICS[key];
     let pool = topic.gens;
-    if (difficulty === 'basic') pool = pool.filter((x) => !x.advanced);
-    else if (difficulty === 'advanced') pool = pool.filter((x) => x.advanced).concat(pool.filter((x) => !x.advanced).slice(0, 1));
+    const adv = pool.filter((x) => x.advanced), basic = pool.filter((x) => !x.advanced);
+    if (difficulty === 'basic' && basic.length) pool = basic;
+    else if (difficulty === 'advanced' && adv.length) pool = adv.concat(basic.slice(0, 1));
     const idx = Math.floor(Math.random() * pool.length);
     const sig = key + ':' + topic.gens.indexOf(pool[idx]);
-    if (avoid.includes(sig) && tries < 25) continue;
-    const q = pool[idx].g();
-    const { options, correctIndex } = buildOptions(q.answer, q.unit, q.candidates);
+    // en los temas numéricos evitamos repetir el mismo tipo de pregunta seguido
+    if (topic.group === 'fin' && avoid.includes(sig) && tries < 25) continue;
+    const q = pool[idx].g(used);
+    let options = q.options, correctIndex = q.correctIndex;
+    if (!options) ({ options, correctIndex } = buildOptions(q.answer, q.unit, q.candidates));
     return {
       sig,
-      topic: key, topicName: topic.name, topicIcon: topic.icon, topicColor: topic.color,
+      topic: key, topicName: topic.name, topicIcon: topic.icon, topicColor: topic.color, group: topic.group,
       text: q.text, options, correctIndex,
       formula: q.formula, steps: q.steps,
     };
