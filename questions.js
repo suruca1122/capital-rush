@@ -267,7 +267,7 @@ const simpleDiscount = [
   () => {
     const N = nominal(), d = rate(), t = randomTime();
     const E = N * (1 - d * t.n);
-    return {
+    return { dtype: 'c',
       text: `Descontamos una letra de nominal <b>${eur(N)}</b> que vence dentro de <b>${t.txt}</b>, con <b>descuento comercial simple</b> al <b>${pctShort(d)} anual</b>. ¿Qué <b>efectivo</b> recibimos?`,
       answer: E, unit: 'eur',
       candidates: [N / (1 + d * t.n), N * d * t.n, N * Math.pow(1 - d, t.n), N * (1 - d * t.n * 360 / 365)],
@@ -279,7 +279,7 @@ const simpleDiscount = [
   () => {
     const N = nominal(), d = rate(), t = randomTime();
     const D = N * d * t.n;
-    return {
+    return { dtype: 'c',
       text: `Calcula el <b>descuento comercial simple</b> de un efecto de <b>${eur(N)}</b> que vence en <b>${t.txt}</b>, si el tipo de descuento es del <b>${pctShort(d)} anual</b>.`,
       answer: D, unit: 'eur',
       candidates: [N * d * t.n / (1 + d * t.n), N * (1 - d * t.n), N * d, D * 360 / 365],
@@ -291,7 +291,7 @@ const simpleDiscount = [
   () => {
     const N = nominal(), i = rate(), t = randomTime();
     const E = N / (1 + i * t.n);
-    return {
+    return { dtype: 'r',
       text: `Un pagaré de <b>${eur(N)}</b> vence dentro de <b>${t.txt}</b>. Se descuenta con <b>descuento racional simple</b> al <b>${pctShort(i)} anual</b>. ¿Qué <b>efectivo</b> se obtiene?`,
       answer: E, unit: 'eur',
       candidates: [N * (1 - i * t.n), N * (1 + i * t.n), N * Math.pow(1 + i, -t.n), N - N / (1 + i * t.n)],
@@ -303,7 +303,7 @@ const simpleDiscount = [
   () => {
     const N = nominal(), i = rate(), t = randomTime();
     const D = N * i * t.n / (1 + i * t.n);
-    return {
+    return { dtype: 'r',
       text: `¿Cuál es el <b>descuento racional simple</b> de un efecto de <b>${eur(N)}</b> que vence en <b>${t.txt}</b>, al <b>${pctShort(i)} anual</b>?`,
       answer: D, unit: 'eur',
       candidates: [N * i * t.n, N / (1 + i * t.n), N * i * t.n * (1 + i * t.n), N * (1 - Math.pow(1 + i, -t.n)) * 1.02],
@@ -315,7 +315,7 @@ const simpleDiscount = [
   () => {
     const E = nominal() + rnd(0, 99), d = rate(), t = randomTime();
     const N = E / (1 - d * t.n);
-    return {
+    return { dtype: 'c',
       text: `Al descontar un efecto con <b>descuento comercial simple</b> al <b>${pctShort(d)}</b> y <b>${t.txt}</b> antes de su vencimiento, hemos recibido <b>${eur(E)}</b>. ¿Cuál era su <b>nominal</b>?`,
       answer: N, unit: 'eur', advanced: true,
       candidates: [E * (1 + d * t.n), E / (1 + d * t.n), E * (1 - d * t.n), E / Math.pow(1 - d, t.n) * 1.01],
@@ -327,12 +327,36 @@ const simpleDiscount = [
   () => {
     const N = nominal(), d = rate(), t = randomTime();
     const E = Math.round(N * (1 - d * t.n) * 100) / 100;
-    return {
+    return { dtype: 'c',
       text: `Una letra de <b>${eur(N)}</b> que vence en <b>${t.txt}</b> se descuenta (descuento comercial simple) y se reciben <b>${eur(E)}</b>. ¿Cuál es el <b>tipo de descuento anual</b>?`,
       answer: d, unit: 'pct', advanced: true,
       candidates: [(N / E - 1) / t.n, (1 - E / N), (1 - E / N) / t.raw > 0.005 ? (1 - E / N) / t.raw : d + 0.01, d + 0.005],
       formula: `d = (1 − E / N) / n`,
       steps: `d = (1 − ${eur(E)} / ${eur(N)}) / ${t.frac} = <b>${pct(d)}</b>`,
+    };
+  },
+  // Racional: nominal a partir del efectivo
+  () => {
+    const E = nominal() + rnd(0, 99), i = rate(), t = randomTime();
+    const N = E * (1 + i * t.n);
+    return { dtype: 'r',
+      text: `Al descontar un efecto con <b>descuento racional simple</b> al <b>${pctShort(i)}</b> y <b>${t.txt}</b> antes de su vencimiento, hemos recibido <b>${eur(E)}</b>. ¿Cuál era su <b>nominal</b>?`,
+      answer: N, unit: 'eur', advanced: true,
+      candidates: [E / (1 - i * t.n), E * (1 - i * t.n), E / (1 + i * t.n), E * Math.pow(1 + i, t.n) * 1.01],
+      formula: `N = E · (1 + i · n)`,
+      steps: `N = ${eur(E)} · (1 + ${dec(i)} · ${t.frac}) = <b>${eur(N)}</b>`,
+    };
+  },
+  // Racional: tipo de interés
+  () => {
+    const N = nominal(), i = rate(), t = randomTime();
+    const E = Math.round(N / (1 + i * t.n) * 100) / 100;
+    return { dtype: 'r',
+      text: `Un efecto de <b>${eur(N)}</b> que vence en <b>${t.txt}</b> se descuenta con <b>descuento racional simple</b> y se reciben <b>${eur(E)}</b>. ¿Qué <b>tipo de interés anual</b> se aplicó?`,
+      answer: i, unit: 'pct', advanced: true,
+      candidates: [(1 - E / N) / t.n, N / E - 1, i + 0.005, i - 0.005 > 0.005 ? i - 0.005 : i + 0.01],
+      formula: `i = (N / E − 1) / n`,
+      steps: `i = (${eur(N)} / ${eur(E)} − 1) / ${t.frac} = <b>${pct(i)}</b>`,
     };
   },
 ];
@@ -345,7 +369,7 @@ const compoundDiscount = [
   () => {
     const N = nominal(), i = rate(), n = rnd(2, 8);
     const E = N * Math.pow(1 + i, -n);
-    return {
+    return { dtype: 'r',
       text: `Un efecto de <b>${eur(N)}</b> vence dentro de <b>${n} años</b>. Se descuenta con <b>descuento racional compuesto</b> al <b>${pctShort(i)} anual</b>. ¿Qué <b>efectivo</b> se recibe?`,
       answer: E, unit: 'eur',
       candidates: [N * Math.pow(1 - i, n), N / (1 + i * n), N * (1 - i * n), N * Math.pow(1 + i, -(n - 1))],
@@ -357,7 +381,7 @@ const compoundDiscount = [
   () => {
     const N = nominal(), i = rate(), n = rnd(2, 8);
     const D = N * (1 - Math.pow(1 + i, -n));
-    return {
+    return { dtype: 'r',
       text: `Calcula el <b>descuento racional compuesto</b> de un capital de <b>${eur(N)}</b> que vence dentro de <b>${n} años</b>, al <b>${pctShort(i)} anual</b>.`,
       answer: D, unit: 'eur',
       candidates: [N * (1 - Math.pow(1 - i, n)), N * i * n, N * Math.pow(1 + i, -n), N * i * n / (1 + i * n)],
@@ -369,7 +393,7 @@ const compoundDiscount = [
   () => {
     const N = nominal(), d = rate(), n = rnd(2, 8);
     const E = N * Math.pow(1 - d, n);
-    return {
+    return { dtype: 'c',
       text: `Se descuenta un efecto de <b>${eur(N)}</b> que vence en <b>${n} años</b> con <b>descuento comercial compuesto</b> al <b>${pctShort(d)} anual</b>. ¿Qué <b>efectivo</b> se obtiene?`,
       answer: E, unit: 'eur',
       candidates: [N * Math.pow(1 + d, -n), N * (1 - d * n), N * Math.pow(1 - d, n - 1), N * (1 - Math.pow(1 - d, n))],
@@ -381,7 +405,7 @@ const compoundDiscount = [
   () => {
     const N = nominal(), d = rate(), n = rnd(2, 8);
     const D = N * (1 - Math.pow(1 - d, n));
-    return {
+    return { dtype: 'c',
       text: `¿Cuál es el <b>descuento comercial compuesto</b> de un efecto de <b>${eur(N)}</b> con vencimiento a <b>${n} años</b>, al <b>${pctShort(d)} anual</b>?`,
       answer: D, unit: 'eur',
       candidates: [N * (1 - Math.pow(1 + d, -n)), N * d * n, N * Math.pow(1 - d, n), N * (1 - Math.pow(1 - d, n - 1))],
@@ -393,7 +417,7 @@ const compoundDiscount = [
   () => {
     const E = nominal() + rnd(0, 99), i = rate(), n = rnd(2, 8);
     const N = E * Math.pow(1 + i, n);
-    return {
+    return { dtype: 'r',
       text: `Descontando un efecto <b>${n} años</b> antes de su vencimiento (<b>descuento racional compuesto</b> al <b>${pctShort(i)}</b>) hemos recibido <b>${eur(E)}</b>. ¿Cuál era el <b>nominal</b>?`,
       answer: N, unit: 'eur', advanced: true,
       candidates: [E * (1 + i * n), E / Math.pow(1 - i, n), E * Math.pow(1 + i, n - 1), E / (1 - i * n)],
@@ -405,12 +429,36 @@ const compoundDiscount = [
   () => {
     const N = nominal(), i = rate(), n = rnd(2, 6);
     const E = Math.round(N * Math.pow(1 + i, -n) * 100) / 100;
-    return {
+    return { dtype: 'r',
       text: `Un efecto de <b>${eur(N)}</b> que vence dentro de <b>${n} años</b> se descuenta (<b>racional compuesto</b>) y se reciben <b>${eur(E)}</b>. ¿Qué <b>tipo de interés anual</b> se aplicó?`,
       answer: i, unit: 'pct', advanced: true,
       candidates: [(N / E - 1) / n, 1 - Math.pow(E / N, 1 / n), N / E - 1, Math.pow(N / E, 1 / (n + 1)) - 1],
       formula: `i = (N / E)${sup('1/n')} − 1`,
       steps: `i = (${eur(N)} / ${eur(E)})${sup('1/' + n)} − 1 = <b>${pct(i)}</b>`,
+    };
+  },
+  // Comercial: nominal
+  () => {
+    const E = nominal() + rnd(0, 99), d = rate(), n = rnd(2, 8);
+    const N = E / Math.pow(1 - d, n);
+    return { dtype: 'c',
+      text: `Descontando un efecto <b>${n} años</b> antes de su vencimiento (<b>descuento comercial compuesto</b> al <b>${pctShort(d)}</b>) hemos recibido <b>${eur(E)}</b>. ¿Cuál era el <b>nominal</b>?`,
+      answer: N, unit: 'eur', advanced: true,
+      candidates: [E * Math.pow(1 + d, n), E / (1 - d * n), E / Math.pow(1 - d, n - 1), E * (1 + d * n)],
+      formula: `N = E / (1 − d)${sup('n')}`,
+      steps: `N = ${eur(E)} / (1 − ${dec(d)})${sup(n)} = <b>${eur(N)}</b>`,
+    };
+  },
+  // Comercial: tipo de descuento
+  () => {
+    const N = nominal(), d = rate(), n = rnd(2, 6);
+    const E = Math.round(N * Math.pow(1 - d, n) * 100) / 100;
+    return { dtype: 'c',
+      text: `Un efecto de <b>${eur(N)}</b> que vence dentro de <b>${n} años</b> se descuenta (<b>comercial compuesto</b>) y se reciben <b>${eur(E)}</b>. ¿Cuál es el <b>tipo de descuento anual</b>?`,
+      answer: d, unit: 'pct', advanced: true,
+      candidates: [Math.pow(N / E, 1 / n) - 1, (1 - E / N) / n, 1 - E / N, 1 - Math.pow(E / N, 1 / (n + 1))],
+      formula: `d = 1 − (E / N)${sup('1/n')}`,
+      steps: `d = 1 − (${eur(E)} / ${eur(N)})${sup('1/' + n)} = <b>${pct(d)}</b>`,
     };
   },
 ];
@@ -427,16 +475,19 @@ const TOPICS = {
 
 // Probamos cada generador una vez para saber cuáles son "avanzados"
 for (const t of Object.values(TOPICS)) {
-  t.gens = t.gens.map((g) => ({ g, advanced: !!g(new Set()).advanced }));
+  t.gens = t.gens.map((g) => { const s = g(new Set()); return { g, advanced: !!s.advanced, dtype: s.dtype || null }; });
   t.group = t.group || 'fin';
 }
 
-function generateQuestion(topics, difficulty = 'mix', avoid = [], used = new Set()) {
+function generateQuestion(topics, difficulty = 'mix', avoid = [], used = new Set(), discountType = 'both') {
   const keys = topics && topics.length ? topics : Object.keys(TOPICS);
   for (let tries = 0; tries < 30; tries++) {
     const key = pick(keys);
     const topic = TOPICS[key];
     let pool = topic.gens;
+    // descuento: solo comercial ('c'), solo racional ('r') o ambos
+    if (discountType === 'commercial') pool = pool.filter((x) => !x.dtype || x.dtype === 'c');
+    else if (discountType === 'rational') pool = pool.filter((x) => !x.dtype || x.dtype === 'r');
     const adv = pool.filter((x) => x.advanced), basic = pool.filter((x) => !x.advanced);
     if (difficulty === 'basic' && basic.length) pool = basic;
     else if (difficulty === 'advanced' && adv.length) pool = adv.concat(basic.slice(0, 1));

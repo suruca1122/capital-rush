@@ -34,11 +34,20 @@ fetch('/api/info').then((r) => r.json()).then((d) => {
   const entries = Object.entries(d.topics);
   $('topicPickFin').innerHTML = entries.filter(([, t]) => t.group !== 'cont').map(tile).join('');
   $('topicPickCont').innerHTML = entries.filter(([, t]) => t.group === 'cont').map(tile).join('');
+  document.querySelectorAll('.topic-pick input').forEach((i) => i.addEventListener('change', updateDtypeRow));
+  updateDtypeRow();
 });
+
+// El selector de tipo de descuento solo se muestra si hay algún tema de descuento marcado
+function updateDtypeRow() {
+  const on = ['sdiscount', 'cdiscount'].some((k) => { const el = document.getElementById('tp-' + k); return el && el.checked; });
+  $('dtypeRow').classList.toggle('hidden', !on);
+}
 
 document.querySelectorAll('.quick [data-q]').forEach((b) => (b.onclick = () => {
   const g = b.dataset.q;
   document.querySelectorAll('.topic-pick input').forEach((i) => (i.checked = g === 'all' || i.dataset.g === g));
+  updateDtypeRow();
   Sfx.unlock(); Sfx.pop();
 }));
 
@@ -46,7 +55,8 @@ $('createBtn').onclick = () => {
   Sfx.unlock(); Sfx.pop();
   const topics = [...document.querySelectorAll('.topic-pick input:checked')].map((i) => i.value);
   if (!topics.length) return alert('Elige al menos un tema');
-  socket.emit('host:create', { topics, time: $('time').value, rounds: $('rounds').value, difficulty: $('difficulty').value }, (res) => {
+  const discountType = (document.querySelector('input[name="dtype"]:checked') || {}).value || 'both';
+  socket.emit('host:create', { topics, time: $('time').value, rounds: $('rounds').value, difficulty: $('difficulty').value, discountType }, (res) => {
     if (!res.ok) return;
     room = { code: res.code, token: res.token };
     sessionStorage.setItem('cr-host', JSON.stringify(room));

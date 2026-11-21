@@ -36,8 +36,10 @@ Todas se generan con **datos aleatorios**, así que nunca se repiten. Los distra
 |---|---|---|
 | Interés simple | Cn, intereses, C0 | tipo de interés, tiempo |
 | Interés compuesto | Cn, intereses, C0 | tipo, tiempo (logaritmos), capitalización fraccionada, TAE, tipos equivalentes |
-| Descuento simple | comercial y racional: efectivo y descuento | nominal, tipo de descuento |
-| Descuento compuesto | comercial y racional: efectivo y descuento | nominal, tipo |
+| Descuento simple | comercial y racional: efectivo y descuento | nominal, tipo de descuento o de interés |
+| Descuento compuesto | comercial y racional: efectivo y descuento | nominal, tipo de descuento o de interés |
+
+Si marcas *Descuento simple* o *Descuento compuesto*, aparece un selector para preguntar por **descuento comercial y racional**, **solo comercial** o **solo racional**. Cada combinación tiene preguntas básicas y avanzadas.
 
 Convenio: año comercial de 360 días. La opción *Dificultad* solo afecta a estos temas.
 

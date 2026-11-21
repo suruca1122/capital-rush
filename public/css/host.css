@@ -175,3 +175,13 @@
 .crown-hero { margin-bottom: -10px; }
 .q-opts.long .q-opt { font-size: clamp(13px, 1.05vw, 22px); line-height: 1.2; }
 .q-text .sub { font-size: 0.75em; }
+
+/* Tipo de descuento */
+.dtype-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 12px; padding: 12px 16px; border-radius: 14px;
+  background: color-mix(in srgb, var(--yellow) 8%, transparent); border: 1px dashed color-mix(in srgb, var(--yellow) 50%, transparent); animation: slideIn 0.3s ease-out; }
+.dtype-label { font-weight: 700; color: var(--yellow); }
+.seg { display: inline-flex; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-b); }
+.seg input { display: none; }
+.seg label { margin: 0; padding: 9px 16px; cursor: pointer; font-weight: 700; color: var(--muted); background: #ffffff08; transition: all 0.15s; }
+.seg label + input + label { border-left: 1px solid var(--glass-b); }
+.seg input:checked + label { background: var(--yellow); color: #1a0b3d; }
