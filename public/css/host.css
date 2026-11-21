@@ -179,9 +179,10 @@
 /* Tipo de descuento */
 .dtype-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 12px; padding: 12px 16px; border-radius: 14px;
   background: color-mix(in srgb, var(--yellow) 8%, transparent); border: 1px dashed color-mix(in srgb, var(--yellow) 50%, transparent); animation: slideIn 0.3s ease-out; }
-.dtype-label { font-weight: 700; color: var(--yellow); }
+.dtype-label { font-weight: 700; color: var(--yellow); min-width: 222px; white-space: nowrap; }
+.dtype-row + .dtype-row { margin-top: 8px; }
 .seg { display: inline-flex; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-b); }
 .seg input { display: none; }
-.seg label { margin: 0; padding: 9px 16px; cursor: pointer; font-weight: 700; color: var(--muted); background: #ffffff08; transition: all 0.15s; }
+.seg label { margin: 0; padding: 9px 14px; cursor: pointer; font-weight: 700; color: var(--muted); background: #ffffff08; transition: all 0.15s; }
 .seg label + input + label { border-left: 1px solid var(--glass-b); }
 .seg input:checked + label { background: var(--yellow); color: #1a0b3d; }

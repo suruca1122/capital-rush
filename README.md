@@ -39,7 +39,7 @@ Todas se generan con **datos aleatorios**, así que nunca se repiten. Los distra
 | Descuento simple | comercial y racional: efectivo y descuento | nominal, tipo de descuento o de interés |
 | Descuento compuesto | comercial y racional: efectivo y descuento | nominal, tipo de descuento o de interés |
 
-Si marcas *Descuento simple* o *Descuento compuesto*, aparece un selector para preguntar por **descuento comercial y racional**, **solo comercial** o **solo racional**. Cada combinación tiene preguntas básicas y avanzadas.
+Al marcar *Descuento simple* y/o *Descuento compuesto* aparece, **para cada uno por separado**, un selector para preguntar por **descuento comercial y racional**, **solo comercial** o **solo racional**. Por ejemplo, puedes pedir el descuento simple solo comercial y el compuesto solo racional. Todas las opciones tienen preguntas básicas y avanzadas.
 
 Convenio: año comercial de 360 días. La opción *Dificultad* solo afecta a estos temas.
 

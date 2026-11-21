@@ -479,15 +479,17 @@ for (const t of Object.values(TOPICS)) {
   t.group = t.group || 'fin';
 }
 
-function generateQuestion(topics, difficulty = 'mix', avoid = [], used = new Set(), discountType = 'both') {
+// discountTypes: { sdiscount: 'both'|'commercial'|'rational', cdiscount: ... }
+function generateQuestion(topics, difficulty = 'mix', avoid = [], used = new Set(), discountTypes = {}) {
   const keys = topics && topics.length ? topics : Object.keys(TOPICS);
   for (let tries = 0; tries < 30; tries++) {
     const key = pick(keys);
     const topic = TOPICS[key];
     let pool = topic.gens;
     // descuento: solo comercial ('c'), solo racional ('r') o ambos
-    if (discountType === 'commercial') pool = pool.filter((x) => !x.dtype || x.dtype === 'c');
-    else if (discountType === 'rational') pool = pool.filter((x) => !x.dtype || x.dtype === 'r');
+    const dt = discountTypes[key] || 'both';
+    if (dt === 'commercial') pool = pool.filter((x) => !x.dtype || x.dtype === 'c');
+    else if (dt === 'rational') pool = pool.filter((x) => !x.dtype || x.dtype === 'r');
     const adv = pool.filter((x) => x.advanced), basic = pool.filter((x) => !x.advanced);
     if (difficulty === 'basic' && basic.length) pool = basic;
     else if (difficulty === 'advanced' && adv.length) pool = adv.concat(basic.slice(0, 1));

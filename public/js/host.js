@@ -39,9 +39,13 @@ fetch('/api/info').then((r) => r.json()).then((d) => {
 });
 
 // El selector de tipo de descuento solo se muestra si hay algún tema de descuento marcado
+// Cada tema de descuento tiene su propio selector, visible solo si el tema está marcado
+const DISCOUNT_TOPICS = ['sdiscount', 'cdiscount'];
 function updateDtypeRow() {
-  const on = ['sdiscount', 'cdiscount'].some((k) => { const el = document.getElementById('tp-' + k); return el && el.checked; });
-  $('dtypeRow').classList.toggle('hidden', !on);
+  DISCOUNT_TOPICS.forEach((k) => {
+    const el = document.getElementById('tp-' + k);
+    $('dtype-' + k).classList.toggle('hidden', !(el && el.checked));
+  });
 }
 
 document.querySelectorAll('.quick [data-q]').forEach((b) => (b.onclick = () => {
@@ -55,8 +59,8 @@ $('createBtn').onclick = () => {
   Sfx.unlock(); Sfx.pop();
   const topics = [...document.querySelectorAll('.topic-pick input:checked')].map((i) => i.value);
   if (!topics.length) return alert('Elige al menos un tema');
-  const discountType = (document.querySelector('input[name="dtype"]:checked') || {}).value || 'both';
-  socket.emit('host:create', { topics, time: $('time').value, rounds: $('rounds').value, difficulty: $('difficulty').value, discountType }, (res) => {
+  const discountTypes = Object.fromEntries(DISCOUNT_TOPICS.map((k) => [k, (document.querySelector(`input[name="dt-${k}"]:checked`) || {}).value || 'both']));
+  socket.emit('host:create', { topics, time: $('time').value, rounds: $('rounds').value, difficulty: $('difficulty').value, discountTypes }, (res) => {
     if (!res.ok) return;
     room = { code: res.code, token: res.token };
     sessionStorage.setItem('cr-host', JSON.stringify(room));

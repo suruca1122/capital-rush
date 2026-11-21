@@ -63,7 +63,7 @@ function clearTimers(room) {
 function nextQuestion(room) {
   clearTimers(room);
   room.round++;
-  const q = generateQuestion(room.settings.topics, room.settings.difficulty, room.recent, room.used, room.settings.discountType);
+  const q = generateQuestion(room.settings.topics, room.settings.difficulty, room.recent, room.used, room.settings.discountTypes);
   room.recent = [...room.recent.slice(-4), q.sig];
   room.question = q;
   room.answers = new Map();
@@ -159,7 +159,10 @@ io.on('connection', (socket) => {
         time: Math.min(180, Math.max(10, Number(settings.time) || 60)),
         rounds: Math.min(30, Math.max(4, Number(settings.rounds) || 10)),
         difficulty: ['basic', 'mix', 'advanced'].includes(settings.difficulty) ? settings.difficulty : 'mix',
-        discountType: ['both', 'commercial', 'rational'].includes(settings.discountType) ? settings.discountType : 'both',
+        discountTypes: Object.fromEntries(['sdiscount', 'cdiscount'].map((k) => {
+          const v = (settings.discountTypes || {})[k];
+          return [k, ['both', 'commercial', 'rational'].includes(v) ? v : 'both'];
+        })),
       },
       players: new Map(), state: 'lobby', round: 0, recent: [], used: new Set(), answers: new Map(), created: Date.now(), lastActivity: Date.now(),
     };
