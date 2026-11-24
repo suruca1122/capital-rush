@@ -13,5 +13,12 @@
     "express": "^5.3.0",
     "qrcode": "^1.5.4",
     "socket.io": "^4.8.4"
+  },
+  "devDependencies": {
+    "@remotion/cli": "^4.0.547",
+    "hyperframes": "^0.9.91",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "^4.0.547"
   }
 }
