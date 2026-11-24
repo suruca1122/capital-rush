@@ -4,7 +4,10 @@
   "description": "Capital Rush: carrera multijugador para repasar matemática financiera",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "trailer": "remotion studio trailer/index.ts",
+    "trailer:render": "remotion render trailer/index.ts Trailer out/trailer.mp4",
+    "trailer:render-vertical": "remotion render trailer/index.ts TrailerVertical out/trailer-vertical.mp4"
   },
   "engines": {
     "node": ">=18"
@@ -16,6 +19,7 @@
   },
   "devDependencies": {
     "@remotion/cli": "^4.0.547",
+    "@remotion/google-fonts": "^4.0.547",
     "hyperframes": "^0.9.91",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
