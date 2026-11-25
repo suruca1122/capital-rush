@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbsoluteFill, Series } from 'remotion';
+import { AbsoluteFill, Audio, Series, staticFile } from 'remotion';
 import { Background } from './scenes/Background';
 import { Intro } from './scenes/Intro';
 import { Logo } from './scenes/Logo';
@@ -28,6 +28,8 @@ export const TRAILER_DURATION = SCENES.reduce((s, [, d]) => s + d, 0);
 export const Trailer: React.FC = () => (
   <AbsoluteFill>
     <Background />
+    <Audio src={staticFile('audio/musica.mp3')} />
+    <Audio src={staticFile('audio/voz.mp3')} />
     <Series>
       {SCENES.map(([Scene, d], i) => (
         <Series.Sequence key={i} durationInFrames={d}>

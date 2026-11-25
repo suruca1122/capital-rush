@@ -5,9 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "trailer": "remotion studio trailer/index.ts",
-    "trailer:render": "remotion render trailer/index.ts Trailer out/trailer.mp4",
-    "trailer:render-vertical": "remotion render trailer/index.ts TrailerVertical out/trailer-vertical.mp4"
+    "trailer": "remotion studio trailer/index.ts --public-dir=trailer/public",
+    "trailer:render": "remotion render trailer/index.ts Trailer out/trailer.mp4 --public-dir=trailer/public",
+    "trailer:render-vertical": "remotion render trailer/index.ts TrailerVertical out/trailer-vertical.mp4 --public-dir=trailer/public"
   },
   "engines": {
     "node": ">=18"
